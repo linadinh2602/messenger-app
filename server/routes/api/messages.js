@@ -12,8 +12,15 @@ router.post("/", async (req, res, next) => {
     const { recipientId, text, conversationId } = req.body;
     const sender = await User.findByPk(senderId);
 
-    // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
+      const existingConversation = await Conversation.findByPk(conversationId);
+      // Check to make sure user has access to the provided conversation
+      if (!existingConversation.hasAccess(senderId)) {
+        res
+          .status(401)
+          .send("Attempted to send message in unauthorized conversation");
+      }
+
       const message = await Message.create({ senderId, text, conversationId });
       return res.json({ message, sender });
     }
