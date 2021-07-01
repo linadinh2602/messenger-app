@@ -10,7 +10,9 @@ router.post("/", async (req, res, next) => {
     }
     const senderId = req.user.id;
     const { recipientId, text, conversationId } = req.body;
-    const sender = await User.findByPk(senderId);
+    const sender = await User.findByPk(senderId, {
+      attributes: ["id", "username", "email", "photoUrl"],
+    });
 
     if (conversationId) {
       const existingConversation = await Conversation.findByPk(conversationId);
