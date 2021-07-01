@@ -31,6 +31,16 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
+export const updateConversationToStore = (state, conversation) => {
+  // map and replace conversation in state that has the same id as given conversation
+  return state.map((convo) => {
+    if (convo.id === conversation.id) {
+      return conversation;
+    }
+    return convo;
+  });
+};
+
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
     if (convo.otherUser.id === id) {

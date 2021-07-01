@@ -99,4 +99,23 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.patch("/:conversationId/messages", async (req, res, next) => {
+  try {
+    // Get the conversationId from params
+    const conversation = await Conversation.findByPk(req.params.conversationId);
+    // Get userId from req.user.id => auth user
+    const userId = req.user.id;
+    // Check to make sure user has access to the conversation using hasAccess
+    if (!conversation.hasAccess(userId)) {
+      res
+        .status(401)
+        .send("Attempted to update messages in unauthorized conversation");
+    }
+    await conversation.readAllMessage(userId);
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

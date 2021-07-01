@@ -1,10 +1,12 @@
 import axios from "axios";
 import socket from "../../socket";
+import { setActiveChat } from "../activeConversation";
 import {
   gotConversations,
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  updateConversation,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -89,6 +91,12 @@ const sendMessage = (data, body) => {
     recipientId: body.recipientId,
     sender: data.sender,
   });
+};
+
+export const setConversationActive = (conversation) => async (dispatch) => {
+  await axios.patch(`/api/conversations/${conversation.id}/messages`);
+  dispatch(updateConversation({ ...conversation, unreadMessageCount: 0 }));
+  dispatch(setActiveChat(conversation.otherUser.username));
 };
 
 // message format to send: {recipientId, text, conversationId}

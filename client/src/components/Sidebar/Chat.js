@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Box } from "@material-ui/core";
-import { BadgeAvatar, ChatContent, ChipStatus } from "../Sidebar";
+import Chip from "@material-ui/core/Chip";
+import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
-import { setActiveChat } from "../../store/activeConversation";
+import { setConversationActive } from "../../store/utils/thunkCreators";
 import { connect } from "react-redux";
 
 const styles = {
@@ -17,11 +18,14 @@ const styles = {
       cursor: "grab",
     },
   },
+  chip: {
+    marginRight: 20,
+  },
 };
 
 class Chat extends Component {
   handleClick = async (conversation) => {
-    await this.props.setActiveChat(conversation.otherUser.username);
+    await this.props.setConversationActive(conversation);
   };
 
   render() {
@@ -40,7 +44,14 @@ class Chat extends Component {
           sidebar={true}
         />
         <ChatContent conversation={this.props.conversation} />
-        {unreadMessage > 0 ? <ChipStatus count={unreadMessage} /> : null}
+        {unreadMessage > 0 ? (
+          <Chip
+            size='small'
+            label={unreadMessage}
+            color='primary'
+            className={classes.chip}
+          />
+        ) : null}
       </Box>
     );
   }
@@ -48,8 +59,8 @@ class Chat extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setActiveChat: (id) => {
-      dispatch(setActiveChat(id));
+    setConversationActive: (conversation) => {
+      dispatch(setConversationActive(conversation));
     },
   };
 };
