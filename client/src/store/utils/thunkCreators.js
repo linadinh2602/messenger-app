@@ -94,9 +94,13 @@ const sendMessage = (data, body) => {
 };
 
 export const setConversationActive = (conversation) => async (dispatch) => {
-  await axios.patch(`/api/conversations/${conversation.id}/messages`);
-  dispatch(updateConversation({ ...conversation, unreadMessageCount: 0 }));
-  dispatch(setActiveChat(conversation.otherUser.username));
+  try {
+    await axios.patch(`/api/conversations/${conversation.id}/messages`);
+    dispatch(updateConversation({ ...conversation, unreadMessageCount: 0 }));
+    dispatch(setActiveChat(conversation.otherUser.username));
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // message format to send: {recipientId, text, conversationId}

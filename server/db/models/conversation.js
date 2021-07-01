@@ -52,8 +52,6 @@ Conversation.prototype.getUnreadMessageCount = async function (userId) {
   return unreadMessageCount;
 };
 
-// Create a new method call readAllMessage on the conversation which will take a userId, and mark all
-// conversation whose sender != userId to be read
 Conversation.prototype.readAllMessage = async function (userId) {
   await Message.update(
     { hasRead: true },
