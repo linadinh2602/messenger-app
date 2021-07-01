@@ -95,8 +95,10 @@ const sendMessage = (data, body) => {
 
 export const setConversationActive = (conversation) => async (dispatch) => {
   try {
-    await axios.patch(`/api/conversations/${conversation.id}/messages`);
-    dispatch(updateConversation({ ...conversation, unreadMessageCount: 0 }));
+    if (conversation.id) {
+      await axios.patch(`/api/conversations/${conversation.id}/messages`);
+      dispatch(updateConversation({ ...conversation, unreadMessageCount: 0 }));
+    }
     dispatch(setActiveChat(conversation.otherUser.username));
   } catch (error) {
     console.error(error);
