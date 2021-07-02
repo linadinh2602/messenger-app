@@ -46,9 +46,9 @@ const Chat = (props) => {
       />
       {unreadMessage > 0 ? (
         <Chip
-          size='small'
+          size="small"
           label={unreadMessage}
-          color='primary'
+          color="primary"
           className={classes.unreadStatusChip}
         />
       ) : null}

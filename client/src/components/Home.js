@@ -35,8 +35,8 @@ const Home = (props) => {
 
   if (!user.id) {
     // If we were previously logged in, redirect to login instead of register
-    if (isLoggedIn) return <Redirect to='/login' />;
-    return <Redirect to='/register' />;
+    if (isLoggedIn) return <Redirect to="/login" />;
+    return <Redirect to="/register" />;
   }
 
   return (
@@ -45,7 +45,7 @@ const Home = (props) => {
       <Button className={classes.logout} onClick={handleLogout}>
         Logout
       </Button>
-      <Grid container component='main' className={classes.root}>
+      <Grid container component="main" className={classes.root}>
         <CssBaseline />
         <SidebarContainer />
         <ActiveChat />
