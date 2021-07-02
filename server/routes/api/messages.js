@@ -19,7 +19,7 @@ router.post("/", async (req, res, next) => {
       // Check to make sure user has access to the provided conversation
       if (!existingConversation.hasAccess(senderId)) {
         res
-          .status(401)
+          .status(403)
           .send("Attempted to send message in unauthorized conversation");
       }
 
