@@ -98,3 +98,14 @@ export const addNewConvoToStore = (state, recipientId, message) => {
     }
   });
 };
+
+export const addNewReceivedConversationToStore = (state, sender, message) => {
+  const newConvo = {
+    id: message.conversationId,
+    otherUser: sender,
+    messages: [message],
+    unreadMessageCount: 1, // A newly received message always has 1 unread notification to start
+  };
+  newConvo.latestMessageText = message.text;
+  return [newConvo, ...state];
+};
