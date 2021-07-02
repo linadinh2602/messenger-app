@@ -1,5 +1,5 @@
 export const addMessageToStore = (state, payload) => {
-  const { message, sender } = payload;
+  const { message, sender, incrementUnreadCount = false } = payload;
 
   // if state does not contain any conversation with convo.id !== message.conversationId
   // then create a new conversation and add to the state. When this happens, the sender
@@ -13,6 +13,7 @@ export const addMessageToStore = (state, payload) => {
       id: message.conversationId,
       otherUser: sender,
       messages: [message],
+      unreadMessageCount: incrementUnreadCount ? 1 : 0,
     };
     newConvo.latestMessageText = message.text;
     return [newConvo, ...state];
@@ -23,6 +24,9 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
+      convoCopy.unreadMessageCount = incrementUnreadCount
+        ? convo.unreadMessageCount + 1
+        : 0;
 
       return convoCopy;
     } else {
@@ -97,15 +101,4 @@ export const addNewConvoToStore = (state, recipientId, message) => {
       return convo;
     }
   });
-};
-
-export const addNewReceivedConversationToStore = (state, sender, message) => {
-  const newConvo = {
-    id: message.conversationId,
-    otherUser: sender,
-    messages: [message],
-    unreadMessageCount: 1, // A newly received message always has 1 unread notification to start
-  };
-  newConvo.latestMessageText = message.text;
-  return [newConvo, ...state];
 };

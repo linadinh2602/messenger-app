@@ -5,19 +5,18 @@ import {
   removeOfflineUserFromStore,
   addMessageToStore,
   updateConversationToStore,
-  addNewReceivedConversationToStore,
 } from "./utils/reducerFunctions";
 
 // ACTIONS
 
 const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 const SET_MESSAGE = "SET_MESSAGE";
+const RECEIVE_NEW_MESSAGE = "RECEIVE_NEW_MESSAGE";
 const ADD_ONLINE_USER = "ADD_ONLINE_USER";
 const REMOVE_OFFLINE_USER = "REMOVE_OFFLINE_USER";
 const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
 const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
 const ADD_CONVERSATION = "ADD_CONVERSATION";
-const RECEIVE_NEW_CONVERSATION = "RECEIVE_NEW_CONVERSATION";
 const UPDATE_CONVERSATION = "UPDATE_CONVERSATION";
 
 // ACTION CREATORS
@@ -35,6 +34,17 @@ export const setNewMessage = (message, sender) => {
   return {
     type: SET_MESSAGE,
     payload: { message, sender: sender || null },
+  };
+};
+
+export const receiveNewMessage = (message, sender, hasRead) => {
+  return {
+    type: RECEIVE_NEW_MESSAGE,
+    payload: {
+      message,
+      sender: sender || null,
+      incrementUnreadCount: !hasRead,
+    },
   };
 };
 
@@ -73,13 +83,6 @@ export const addConversation = (recipientId, newMessage) => {
   };
 };
 
-export const receiveNewConversation = (sender, newMessage) => {
-  return {
-    type: RECEIVE_NEW_CONVERSATION,
-    payload: { sender, newMessage },
-  };
-};
-
 // update a conversation from the existing list of conversation in the state
 export const updateConversation = (updatedConversation) => {
   return {
@@ -97,6 +100,8 @@ const reducer = (state = [], action) => {
       return action.conversations;
     case SET_MESSAGE:
       return addMessageToStore(state, action.payload);
+    case RECEIVE_NEW_MESSAGE:
+      return addMessageToStore(state, action.payload);
     case ADD_ONLINE_USER: {
       return addOnlineUserToStore(state, action.id);
     }
@@ -111,12 +116,6 @@ const reducer = (state = [], action) => {
       return addNewConvoToStore(
         state,
         action.payload.recipientId,
-        action.payload.newMessage
-      );
-    case RECEIVE_NEW_CONVERSATION:
-      return addNewReceivedConversationToStore(
-        state,
-        action.payload.sender,
         action.payload.newMessage
       );
     case UPDATE_CONVERSATION:

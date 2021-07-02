@@ -7,7 +7,7 @@ import {
   setNewMessage,
   setSearchedUsers,
   updateConversation,
-  receiveNewConversation,
+  receiveNewMessage,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -112,25 +112,12 @@ export const receivedNewMessage =
       const { activeConversation, conversations } = getState();
 
       if (sender.username === activeConversation) {
-        dispatch(setNewMessage(message, sender));
+        dispatch(setNewMessage(message, sender, true));
         await axios.patch(
           `/api/conversations/${message.conversationId}/messages`
         );
       } else {
-        const convo = conversations.find(
-          (conversation) => message.conversationId === conversation.id
-        );
-        if (convo) {
-          dispatch(setNewMessage(message, sender));
-          dispatch(
-            updateConversation({
-              ...convo,
-              unreadMessageCount: convo.unreadMessageCount + 1,
-            })
-          );
-        } else {
-          dispatch(receiveNewConversation(sender, message, 1));
-        }
+        dispatch(receiveNewMessage(message, sender, false));
       }
     } catch (error) {
       console.error(error);
