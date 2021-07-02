@@ -99,7 +99,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.patch("/:conversationId/messages", async (req, res, next) => {
+router.patch("/:conversationId/messages/read", async (req, res, next) => {
   try {
     const conversation = await Conversation.findByPk(req.params.conversationId);
     const userId = req.user.id;

@@ -18,7 +18,7 @@ const styles = {
       cursor: "grab",
     },
   },
-  chip: {
+  unreadStatusChip: {
     marginRight: 20,
   },
 };
@@ -49,7 +49,7 @@ class Chat extends Component {
             size='small'
             label={unreadMessage}
             color='primary'
-            className={classes.chip}
+            className={classes.unreadStatusChip}
           />
         ) : null}
       </Box>
