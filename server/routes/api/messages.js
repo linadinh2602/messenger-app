@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Conversation, Message } = require("../../db/models");
+const { Conversation, Message, User } = require("../../db/models");
 const onlineUsers = require("../../onlineUsers");
 
 // expects {recipientId, text, conversationId } in body (conversationId will be null if no conversation exists yet)
@@ -9,10 +9,20 @@ router.post("/", async (req, res, next) => {
       return res.sendStatus(401);
     }
     const senderId = req.user.id;
-    const { recipientId, text, conversationId, sender } = req.body;
+    const { recipientId, text, conversationId } = req.body;
+    const sender = await User.findByPk(senderId, {
+      attributes: ["id", "username", "email", "photoUrl"],
+    });
 
-    // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
+      const existingConversation = await Conversation.findByPk(conversationId);
+      // Check to make sure user has access to the provided conversation
+      if (!existingConversation.hasAccess(senderId)) {
+        res
+          .status(403)
+          .send("Attempted to send message in unauthorized conversation");
+      }
+
       const message = await Message.create({ senderId, text, conversationId });
       return res.json({ message, sender });
     }

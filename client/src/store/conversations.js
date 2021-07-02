@@ -25,6 +25,8 @@ export const gotConversations = (conversations) => {
   };
 };
 
+// If the current user is sending the message, then the sender is null
+// If the current user is receiving the message, then the sender info is required
 export const setNewMessage = (message, sender) => {
   return {
     type: SET_MESSAGE,

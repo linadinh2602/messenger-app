@@ -1,7 +1,14 @@
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
-  // if sender isn't null, that means the message needs to be put in a brand new convo
-  if (sender !== null) {
+
+  // if state does not contain any conversation with convo.id !== message.conversationId
+  // then create a new conversation and add to the state. When this happens, the sender
+  // information must be non-null
+  const existingConversation = state.find((convo) => {
+    return convo.id === message.conversationId;
+  });
+
+  if (!existingConversation) {
     const newConvo = {
       id: message.conversationId,
       otherUser: sender,

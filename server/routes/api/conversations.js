@@ -20,9 +20,9 @@ router.get("/", async (req, res, next) => {
         },
       },
       attributes: ["id"],
-      order: [[Message, "createdAt", "DESC"]],
+      order: [[Message, "createdAt", "ASC"]],
       include: [
-        { model: Message, order: ["createdAt", "DESC"] },
+        { model: Message },
         {
           model: User,
           as: "user1",
@@ -69,9 +69,28 @@ router.get("/", async (req, res, next) => {
       }
 
       // set properties for notification count and latest message preview
-      convoJSON.latestMessageText = convoJSON.messages[0].text;
+      convoJSON.latestMessageText =
+        convoJSON.messages[convoJSON.messages.length - 1].text;
       conversations[i] = convoJSON;
     }
+
+    // The query currently can only guarantee the order of messages in the conversation
+    // is properly ordered. However, it doesn't guarantee the order of the conversation itself
+    // thus we need to sort to ensure the conversation is sorted by latest message timestamp
+    conversations.sort((conv1, conv2) => {
+      const date1 = new Date(
+        conv1.messages[conv1.messages.length - 1].createdAt
+      );
+      const date2 = new Date(
+        conv2.messages[conv2.messages.length - 1].createdAt
+      );
+      if (date1.getTime() > date2.getTime()) {
+        return -1;
+      } else if (date1.getTime() < date2.getTime()) {
+        return 1;
+      }
+      return 0;
+    });
 
     res.json(conversations);
   } catch (error) {
