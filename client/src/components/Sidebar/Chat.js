@@ -1,12 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import { Box } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
-import { withStyles } from "@material-ui/core/styles";
 import { setConversationActive } from "../../store/utils/thunkCreators";
-import { connect } from "react-redux";
 
-const styles = {
+const useStyles = makeStyles(() => ({
   root: {
     borderRadius: 8,
     height: 80,
@@ -21,31 +21,35 @@ const styles = {
   unreadStatusChip: {
     marginRight: 20,
   },
-};
+}));
 
-class Chat extends Component {
-  handleClick = async (conversation) => {
-    await this.props.setConversationActive(conversation);
+const Chat = (props) => {
+  const classes = useStyles();
+  const { setConversationActive, conversation } = props;
+  const otherUser = conversation.otherUser;
+  const unreadMessage = conversation.unreadMessageCount;
+
+  const handleClick = async (conversation) => {
+    await setConversationActive(conversation);
   };
-
-  render() {
-    const { classes } = this.props;
-    const otherUser = this.props.conversation.otherUser;
-    const unreadMessage = this.props.conversation.unreadMessageCount;
-    return (
-      <Box
-        onClick={() => this.handleClick(this.props.conversation)}
-        className={classes.root}
-      >
-        <BadgeAvatar
-          photoUrl={otherUser.photoUrl}
-          username={otherUser.username}
-          online={otherUser.online}
-          sidebar={true}
-        />
-        <ChatContent
-          conversation={this.props.conversation}
-          shouldEmphasize={unreadMessage > 0}
+  return (
+    <Box onClick={() => handleClick(conversation)} className={classes.root}>
+      <BadgeAvatar
+        photoUrl={otherUser.photoUrl}
+        username={otherUser.username}
+        online={otherUser.online}
+        sidebar={true}
+      />
+      <ChatContent
+        conversation={conversation}
+        shouldEmphasize={unreadMessage > 0}
+      />
+      {unreadMessage > 0 ? (
+        <Chip
+          size='small'
+          label={unreadMessage}
+          color='primary'
+          className={classes.unreadStatusChip}
         />
         {unreadMessage > 0 && (
           <Chip
@@ -68,4 +72,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Chat));
+export default connect(null, mapDispatchToProps)(Chat);
