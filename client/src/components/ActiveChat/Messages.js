@@ -29,7 +29,7 @@ const Messages = (props) => {
             key={message.id}
             text={message.text}
             time={time}
-            shouldDisplayAvarta={
+            shouldDisplayAvatar={
               lastReadMessage && message.id === lastReadMessage.id
             }
             otherUser={otherUser}
