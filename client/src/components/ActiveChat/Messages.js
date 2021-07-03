@@ -5,7 +5,6 @@ import moment from "moment";
 
 const Messages = (props) => {
   const { messages, otherUser, userId } = props;
-
   const getLastReadMessage = () => {
     const readMessages = messages.filter((message) => {
       return message.hasRead && message.senderId === userId;
@@ -17,7 +16,7 @@ const Messages = (props) => {
 
   const lastReadMessage = useMemo(
     () => getLastReadMessage(),
-    [messages, userId]
+    [messages, userId, getLastReadMessage]
   );
 
   return (
@@ -30,7 +29,9 @@ const Messages = (props) => {
             key={message.id}
             text={message.text}
             time={time}
-            shouldDisplayAvarta={message.id === lastReadMessage.id}
+            shouldDisplayAvarta={
+              lastReadMessage && message.id === lastReadMessage.id
+            }
             otherUser={otherUser}
           />
         ) : (

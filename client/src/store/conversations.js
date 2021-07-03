@@ -93,10 +93,10 @@ export const updateConversation = (updatedConversation) => {
   };
 };
 
-export const markReadConversation = (conversation) => {
+export const markReadConversation = (conversationId) => {
   return {
     type: MARK_READ_CONVERSATION,
-    conversation,
+    conversationId,
   };
 };
 
@@ -130,7 +130,7 @@ const reducer = (state = [], action) => {
     case UPDATE_CONVERSATION:
       return updateConversationToStore(state, action.updatedConversation);
     case MARK_READ_CONVERSATION:
-      return markedReadConversationToStore(state, action.conversation);
+      return markedReadConversationToStore(state, action.conversationId);
     default:
       return state;
   }

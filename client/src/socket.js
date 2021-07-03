@@ -1,6 +1,10 @@
 import io from "socket.io-client";
 import store from "./store";
-import { removeOfflineUser, addOnlineUser } from "./store/conversations";
+import {
+  removeOfflineUser,
+  addOnlineUser,
+  markReadConversation,
+} from "./store/conversations";
 import { receivedNewMessage } from "./store/utils/thunkCreators";
 
 const socket = io(window.location.origin);
@@ -17,6 +21,10 @@ socket.on("connect", () => {
   });
   socket.on("new-message", (data) => {
     store.dispatch(receivedNewMessage(data.message, data.sender));
+  });
+
+  socket.on("open-conversation", (conversationId) => {
+    store.dispatch(markReadConversation(conversationId));
   });
 });
 
