@@ -5,19 +5,15 @@ import moment from "moment";
 
 const Messages = (props) => {
   const { messages, otherUser, userId } = props;
-  const getLastReadMessage = () => {
+
+  const lastReadMessage = useMemo(() => {
     const readMessages = messages.filter((message) => {
       return message.hasRead && message.senderId === userId;
     });
 
     // Since messages are already returned in the right order, there's no need to find max again
     return readMessages[readMessages.length - 1];
-  };
-
-  const lastReadMessage = useMemo(
-    () => getLastReadMessage(),
-    [messages, userId, getLastReadMessage]
-  );
+  }, [messages, userId]);
 
   return (
     <Box>
