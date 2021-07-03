@@ -102,3 +102,21 @@ export const addNewConvoToStore = (state, recipientId, message) => {
     }
   });
 };
+
+export const markedReadConversationToStore = (state, conversation) => {
+  return state.map((convo) => {
+    if (convo.id === conversation.id) {
+      const convoCopy = { ...convo };
+      convoCopy.messages = convoCopy.messages.map((message) => {
+        if (message.senderId !== conversation.otherUser.id) {
+          return { ...message, hasRead: true };
+        } else {
+          return message;
+        }
+      });
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+};

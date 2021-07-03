@@ -8,6 +8,7 @@ import {
   setSearchedUsers,
   updateConversation,
   receiveNewMessage,
+  markReadConversation,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -111,10 +112,19 @@ export const receivedNewMessage =
     try {
       const { activeConversation, conversations } = getState();
 
+      // When receive message from sender, it means that sender must have read all message
+      // that user send. Thus, we can safely mark them as read on the client instead of querying from the server
+      dispatch(
+        markReadConversation(
+          conversations.find((convo) => {
+            return convo.id === message.conversationId;
+          })
+        )
+      );
       if (sender.username === activeConversation) {
         dispatch(setNewMessage(message, sender, true));
         await axios.patch(
-          `/api/conversations/${message.conversationId}/messages`
+          `/api/conversations/${message.conversationId}/messages/read`
         );
       } else {
         dispatch(receiveNewMessage(message, sender, false));
