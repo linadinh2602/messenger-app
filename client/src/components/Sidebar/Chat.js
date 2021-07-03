@@ -43,7 +43,10 @@ class Chat extends Component {
           online={otherUser.online}
           sidebar={true}
         />
-        <ChatContent conversation={this.props.conversation} />
+        <ChatContent
+          conversation={this.props.conversation}
+          shouldEmphasize={unreadMessage > 0}
+        />
         {unreadMessage > 0 ? (
           <Chip
             size='small'
