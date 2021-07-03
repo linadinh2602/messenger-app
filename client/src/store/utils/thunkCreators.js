@@ -8,7 +8,6 @@ import {
   setSearchedUsers,
   updateConversation,
   receiveNewMessage,
-  markReadConversation,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -95,11 +94,16 @@ const sendMessage = (data, body) => {
   });
 };
 
+const openConversation = (conversationId) => {
+  socket.emit("open-conversation", conversationId);
+};
+
 export const setConversationActive = (conversation) => async (dispatch) => {
   try {
     if (conversation.id) {
       await axios.patch(`/api/conversations/${conversation.id}/messages/read`);
       dispatch(updateConversation({ ...conversation, unreadMessageCount: 0 }));
+      openConversation(conversation.id);
     }
     dispatch(setActiveChat(conversation.otherUser.username));
   } catch (error) {
@@ -110,22 +114,17 @@ export const setConversationActive = (conversation) => async (dispatch) => {
 export const receivedNewMessage =
   (message, sender) => async (dispatch, getState) => {
     try {
-      const { activeConversation, conversations } = getState();
+      const { activeConversation } = getState();
 
-      // When receive message from sender, it means that sender must have read all message
-      // that user send. Thus, we can safely mark them as read on the client instead of querying from the server
-      dispatch(
-        markReadConversation(
-          conversations.find((convo) => {
-            return convo.id === message.conversationId;
-          })
-        )
-      );
       if (sender.username === activeConversation) {
         dispatch(setNewMessage(message, sender, true));
         await axios.patch(
           `/api/conversations/${message.conversationId}/messages/read`
         );
+
+        // If the conversation is active, fire event so that recipient on the other end
+        // can flag the message has been read
+        openConversation(message.conversationId);
       } else {
         dispatch(receiveNewMessage(message, sender, false));
       }
