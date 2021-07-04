@@ -10,8 +10,97 @@ import {
   TextField,
 } from "@material-ui/core";
 import { login } from "./store/utils/thunkCreators";
+import { makeStyles } from "@material-ui/core/styles";
+import bubble from "../src/components/SVG/bubble.svg";
+
+export const useStyles = makeStyles((theme) => {
+  return {
+    root: {
+      display: "flex",
+      justifyContent: "space-between",
+      margin: theme.spacing(1, 3, 1, 1),
+    },
+    imageContainer: {
+      backgroundImage: `linear-gradient(to bottom, rgba(58, 141, 255, 0.85), rgba(134, 185, 255, 0.85)), url("../../images/bg-img.png")`,
+      padding: 0,
+      width: "100%",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      position: "relative",
+    },
+    img: {
+      width: "100%",
+    },
+    mainContent: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      marginTop: theme.spacing(2),
+    },
+    topBar: {
+      marginRight: theme.spacing(2),
+    },
+    titleContainer: {
+      position: "absolute",
+      top: "35%",
+      left: "0",
+      width: "100%",
+    },
+    title: {
+      fontSize: 26,
+      fontWeight: "400",
+      textAlign: "center",
+      color: "#ffffff",
+      margin: "auto",
+      width: "60%",
+      marginTop: theme.spacing(2),
+    },
+    header: {
+      fontWeight: "bold",
+    },
+    loginBody: {
+      marginTop: theme.spacing(5),
+    },
+    whiteButtonGrid: {
+      width: 154,
+      height: 54,
+      borderRadius: 5,
+      boxShadow: "0px 2px 10px rgba(74,106,149,0.2)",
+    },
+    whiteButton: {
+      width: 154,
+      height: 54,
+      fontSize: 14,
+      textAlign: "center",
+    },
+    bubbleLogoContainer: {
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
+    },
+    bubbleLogo: {
+      margin: "auto",
+    },
+    blueButtonGrid: {
+      width: 160,
+      height: 56,
+      borderRadius: 3,
+      width: "100%",
+      margin: theme.spacing(3, 5, 0, 5),
+    },
+    blueButton: {
+      width: 160,
+      height: 56,
+      fontSize: 16,
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+  };
+});
 
 const Login = (props) => {
+  const classes = useStyles();
   const history = useHistory();
   const { user, login } = props;
 
@@ -26,43 +115,85 @@ const Login = (props) => {
   if (user.id) {
     return <Redirect to="/home" />;
   }
-
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
-        </Grid>
-        <form onSubmit={handleLogin}>
-          <Grid>
-            <Grid>
-              <FormControl margin="normal" required>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                />
-              </FormControl>
-            </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
-              />
-            </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
-                Login
-              </Button>
-            </Grid>
+    <Box className={classes.root}>
+      <Box className={classes.imageContainer}>
+        <Grid className={classes.titleContainer}>
+          <Grid className={classes.bubbleLogoContainer}>
+            <img className={classes.bubbleLogo} src={bubble} alt="Logo" />
           </Grid>
-        </form>
+          <Typography className={classes.title}>
+            Converse with anyone with any language
+          </Typography>
+        </Grid>
       </Box>
-    </Grid>
+      <Grid container item className={classes.mainContent}>
+        <Grid container item justify="flex-end" alignItems="center">
+          <Typography
+            variant="body1"
+            color="secondary"
+            className={classes.topBar}
+          >
+            Don't have an account?
+          </Typography>
+          <Grid className={classes.whiteButtonGrid}>
+            <Button
+              size="large"
+              color="primary"
+              className={classes.whiteButton}
+              onClick={() => history.push("/register")}
+            >
+              Create account
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid
+          direction="column"
+          alignItems="center"
+          justify="center"
+          className={classes.loginBody}
+        >
+          <Typography variant="h4" className={classes.header}>
+            Welcome back!
+          </Typography>
+          <form onSubmit={handleLogin}>
+            <Grid>
+              <Grid>
+                <FormControl margin="normal" fullWidth required>
+                  <TextField
+                    aria-label="username"
+                    label="Username"
+                    name="username"
+                    type="text"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid>
+                <FormControl margin="normal" fullWidth required>
+                  <TextField
+                    label="Password"
+                    aria-label="password"
+                    type="password"
+                    name="password"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid className={classes.blueButtonGrid}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  color="primary"
+                  className={classes.blueButton}
+                >
+                  Login
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
