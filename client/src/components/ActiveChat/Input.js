@@ -28,14 +28,15 @@ const Input = (props) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const reqBody = {
-      text: event.target.text.value,
-      recipientId: otherUser.id,
-      conversationId: conversationId,
-    };
-    await postMessage(reqBody);
-    setText("");
+    if (event.target.text.value !== "") {
+      const reqBody = {
+        text: event.target.text.value,
+        recipientId: otherUser.id,
+        conversationId: conversationId,
+      };
+      await postMessage(reqBody);
+      setText("");
+    }
   };
 
   return (
