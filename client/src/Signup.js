@@ -43,11 +43,11 @@ const Login = (props) => {
     <Box className={classes.root}>
       <Box className={classes.imageContainer}>
         {" "}
-        <Grid className={classes.titleContainer}>
+        <Grid className={classes.sloganContainer}>
           <Grid className={classes.bubbleLogoContainer}>
             <img className={classes.bubbleLogo} src={bubble} alt="Logo" />
           </Grid>
-          <Typography className={classes.title}>
+          <Typography className={classes.sloganText}>
             Converse with anyone with any language
           </Typography>
         </Grid>
@@ -77,7 +77,7 @@ const Login = (props) => {
           alignItems="center"
           className={classes.loginBody}
         >
-          <Typography variant="h4" className={classes.header}>
+          <Typography variant="h4" className={classes.title}>
             Create an account
           </Typography>
           <form onSubmit={handleRegister}>

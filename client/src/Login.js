@@ -18,7 +18,7 @@ export const useStyles = makeStyles((theme) => {
     root: {
       display: "flex",
       justifyContent: "space-between",
-      margin: theme.spacing(1, 3, 1, 1),
+      margin: theme.spacing(2, 7, 2, 2),
     },
     imageContainer: {
       backgroundImage: `linear-gradient(to bottom, rgba(58, 141, 255, 0.85), rgba(134, 185, 255, 0.85)), url("../../images/bg-img.png")`,
@@ -36,31 +36,32 @@ export const useStyles = makeStyles((theme) => {
       flexDirection: "column",
       justifyContent: "flex-start",
       alignItems: "center",
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(5),
     },
     topBar: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(5),
     },
-    titleContainer: {
+    sloganContainer: {
       position: "absolute",
       top: "35%",
       left: "0",
       width: "100%",
     },
-    title: {
-      fontSize: 26,
-      fontWeight: "400",
+    sloganText: {
+      fontSize: theme.typography.fontSize.title,
       textAlign: "center",
       color: "#ffffff",
       margin: "auto",
       width: "60%",
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(5),
     },
-    header: {
+    title: {
+      fontSize: theme.typography.fontSize.title,
       fontWeight: "bold",
+      marginBottom: theme.spacing(3),
     },
     loginBody: {
-      marginTop: theme.spacing(5),
+      marginTop: theme.spacing(9),
     },
     whiteButtonGrid: {
       width: 154,
@@ -71,7 +72,7 @@ export const useStyles = makeStyles((theme) => {
     whiteButton: {
       width: 154,
       height: 54,
-      fontSize: 14,
+      fontSize: theme.typography.fontSize.medium,
       textAlign: "center",
     },
     bubbleLogoContainer: {
@@ -87,12 +88,12 @@ export const useStyles = makeStyles((theme) => {
       height: 56,
       borderRadius: 3,
       width: "100%",
-      margin: theme.spacing(3, 5, 0, 5),
+      margin: theme.spacing(5, 8, 0, 8),
     },
     blueButton: {
       width: 160,
       height: 56,
-      fontSize: 16,
+      fontSize: theme.typography.fontSize.large,
       fontWeight: "bold",
       textAlign: "center",
     },
@@ -118,11 +119,11 @@ const Login = (props) => {
   return (
     <Box className={classes.root}>
       <Box className={classes.imageContainer}>
-        <Grid className={classes.titleContainer}>
+        <Grid className={classes.sloganContainer}>
           <Grid className={classes.bubbleLogoContainer}>
             <img className={classes.bubbleLogo} src={bubble} alt="Logo" />
           </Grid>
-          <Typography className={classes.title}>
+          <Typography className={classes.sloganText}>
             Converse with anyone with any language
           </Typography>
         </Grid>
@@ -153,7 +154,7 @@ const Login = (props) => {
           justify="center"
           className={classes.loginBody}
         >
-          <Typography variant="h4" className={classes.header}>
+          <Typography variant="h4" className={classes.title}>
             Welcome back!
           </Typography>
           <form onSubmit={handleLogin}>

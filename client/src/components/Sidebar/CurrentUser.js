@@ -5,11 +5,11 @@ import { connect } from "react-redux";
 import { BadgeAvatar } from "./index";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: 44,
-    marginTop: 23,
-    marginLeft: 6,
+    marginTop: theme.spacing(5),
+    marginLeft: theme.spacing(1),
     display: "flex",
     alignItems: "center",
   },
@@ -21,13 +21,13 @@ const useStyles = makeStyles(() => ({
   },
   username: {
     letterSpacing: -0.23,
-    fontSize: 16,
+    fontSize: theme.typography.fontSize.large,
     fontWeight: "bold",
-    marginLeft: 17,
+    marginLeft: theme.spacing(3),
   },
   ellipsis: {
     color: "#95A7C4",
-    marginRight: 24,
+    marginRight: theme.spacing(5),
     opacity: 0.5,
   },
 }));
