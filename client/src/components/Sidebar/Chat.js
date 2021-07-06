@@ -44,25 +44,17 @@ const Chat = (props) => {
         conversation={conversation}
         shouldEmphasize={unreadMessage > 0}
       />
-      {unreadMessage > 0 ? (
+      {unreadMessage > 0 && (
         <Chip
           size="small"
           label={unreadMessage}
           color="primary"
           className={classes.unreadStatusChip}
         />
-        {unreadMessage > 0 && (
-          <Chip
-            size='small'
-            label={unreadMessage}
-            color='primary'
-            className={classes.unreadStatusChip}
-          />
-        )}
-      </Box>
-    );
-  }
-}
+      )}
+    </Box>
+  );
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
