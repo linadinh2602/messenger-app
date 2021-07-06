@@ -44,14 +44,14 @@ class Chat extends Component {
           sidebar={true}
         />
         <ChatContent conversation={this.props.conversation} />
-        {unreadMessage > 0 ? (
+        {unreadMessage > 0 && (
           <Chip
             size='small'
             label={unreadMessage}
             color='primary'
             className={classes.unreadStatusChip}
           />
-        ) : null}
+        )}
       </Box>
     );
   }
