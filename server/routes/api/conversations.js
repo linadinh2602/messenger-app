@@ -71,6 +71,7 @@ router.get("/", async (req, res, next) => {
       // set properties for notification count and latest message preview
       convoJSON.latestMessageText =
         convoJSON.messages[convoJSON.messages.length - 1].text;
+      convoJSON.unreadMessageCount = await convo.getUnreadMessageCount(userId);
       conversations[i] = convoJSON;
     }
 
@@ -93,6 +94,27 @@ router.get("/", async (req, res, next) => {
     });
 
     res.json(conversations);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:conversationId/messages/read", async (req, res, next) => {
+  try {
+    const conversation = await Conversation.findByPk(req.params.conversationId);
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+    const userId = req.user.id;
+
+    // Check to make sure user has access to the conversation using hasAccess
+    if (!conversation.hasAccess(userId)) {
+      res
+        .status(403)
+        .send("Attempted to update messages in unauthorized conversation");
+    }
+    await conversation.readAllMessage(userId);
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }

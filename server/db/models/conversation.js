@@ -26,4 +26,57 @@ Conversation.prototype.hasAccess = function (userId) {
   return this.user1Id === userId || this.user2Id === userId;
 };
 
+Conversation.prototype.getUnreadMessageCount = async function (userId) {
+  const unreadMessageCount = await Message.count({
+    where: {
+      [Op.and]: [
+        {
+          conversationId: {
+            [Op.eq]: this.id,
+          },
+        },
+        {
+          senderId: {
+            [Op.ne]: userId,
+          },
+        },
+        {
+          hasRead: {
+            [Op.is]: false,
+          },
+        },
+      ],
+    },
+  });
+
+  return unreadMessageCount;
+};
+
+Conversation.prototype.readAllMessage = async function (userId) {
+  await Message.update(
+    { hasRead: true },
+    {
+      where: {
+        [Op.and]: [
+          {
+            conversationId: {
+              [Op.eq]: this.id,
+            },
+          },
+          {
+            senderId: {
+              [Op.ne]: userId,
+            },
+          },
+          {
+            hasRead: {
+              [Op.is]: false,
+            },
+          },
+        ],
+      },
+    }
+  );
+};
+
 module.exports = Conversation;
