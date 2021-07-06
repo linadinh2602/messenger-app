@@ -1,5 +1,5 @@
 export const addMessageToStore = (state, payload) => {
-  const { message, sender } = payload;
+  const { message, sender, incrementUnreadCount = false } = payload;
 
   // if state does not contain any conversation with convo.id !== message.conversationId
   // then create a new conversation and add to the state. When this happens, the sender
@@ -13,6 +13,7 @@ export const addMessageToStore = (state, payload) => {
       id: message.conversationId,
       otherUser: sender,
       messages: [message],
+      unreadMessageCount: incrementUnreadCount ? 1 : 0,
     };
     newConvo.latestMessageText = message.text;
     return [newConvo, ...state];
@@ -23,6 +24,9 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
+      convoCopy.unreadMessageCount = incrementUnreadCount
+        ? convo.unreadMessageCount + 1
+        : 0;
 
       return convoCopy;
     } else {
@@ -93,6 +97,27 @@ export const addNewConvoToStore = (state, recipientId, message) => {
       newConvo.messages.push(message);
       newConvo.latestMessageText = message.text;
       return newConvo;
+    } else {
+      return convo;
+    }
+  });
+};
+
+export const markedReadConversationToStore = (state, conversationId) => {
+  return state.map((convo) => {
+    if (convo.id === conversationId) {
+      const messages = convo.messages.map((message) => {
+        if (message.senderId !== convo.otherUser.id) {
+          return { ...message, hasRead: true };
+        } else {
+          return message;
+        }
+      });
+      const convoCopy = {
+        ...convo,
+        messages: [...messages],
+      };
+      return convoCopy;
     } else {
       return convo;
     }

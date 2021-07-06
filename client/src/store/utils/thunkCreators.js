@@ -7,6 +7,7 @@ import {
   setNewMessage,
   setSearchedUsers,
   updateConversation,
+  receiveNewMessage,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -93,17 +94,44 @@ const sendMessage = (data, body) => {
   });
 };
 
+const openConversation = (conversationId) => {
+  socket.emit("open-conversation", conversationId);
+};
+
 export const setConversationActive = (conversation) => async (dispatch) => {
   try {
     if (conversation.id) {
       await axios.patch(`/api/conversations/${conversation.id}/messages/read`);
       dispatch(updateConversation({ ...conversation, unreadMessageCount: 0 }));
+      openConversation(conversation.id);
     }
     dispatch(setActiveChat(conversation.otherUser.username));
   } catch (error) {
     console.error(error);
   }
 };
+
+export const receivedNewMessage =
+  (message, sender) => async (dispatch, getState) => {
+    try {
+      const { activeConversation } = getState();
+
+      if (sender.username === activeConversation) {
+        dispatch(setNewMessage(message, sender, true));
+        await axios.patch(
+          `/api/conversations/${message.conversationId}/messages/read`
+        );
+
+        // If the conversation is active, fire event so that recipient on the other end
+        // can flag the message has been read
+        openConversation(message.conversationId);
+      } else {
+        dispatch(receiveNewMessage(message, sender, false));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation

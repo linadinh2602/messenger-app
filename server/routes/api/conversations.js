@@ -109,12 +109,12 @@ router.patch("/:conversationId/messages/read", async (req, res, next) => {
 
     // Check to make sure user has access to the conversation using hasAccess
     if (!conversation.hasAccess(userId)) {
-      res
+      return res
         .status(403)
         .send("Attempted to update messages in unauthorized conversation");
     }
     await conversation.readAllMessage(userId);
-    res.sendStatus(204);
+    return res.sendStatus(204);
   } catch (error) {
     next(error);
   }
