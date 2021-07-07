@@ -28,4 +28,10 @@ socket.on("connect", () => {
   });
 });
 
+export const tryConnectSocket = () => {
+  if (!socket.connected) {
+    socket.connect();
+  }
+};
+
 export default socket;

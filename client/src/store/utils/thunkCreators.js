@@ -1,5 +1,5 @@
 import axios from "axios";
-import socket from "../../socket";
+import socket, { tryConnectSocket } from "../../socket";
 import { setActiveChat } from "../activeConversation";
 import {
   gotConversations,
@@ -27,7 +27,7 @@ export const fetchUser = () => async (dispatch) => {
     dispatch(gotUser(data));
     const token = await localStorage.getItem("messenger-token");
     socket.auth = { sessionId: token };
-    socket.connect();
+    tryConnectSocket();
     if (data.id) {
       socket.emit("go-online");
     }
@@ -44,7 +44,7 @@ export const register = (credentials) => async (dispatch) => {
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.auth = { sessionId: data.token };
-    socket.connect();
+    tryConnectSocket();
     socket.emit("go-online");
   } catch (error) {
     console.error(error);
@@ -58,7 +58,7 @@ export const login = (credentials) => async (dispatch) => {
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.auth = { sessionId: data.token };
-    socket.connect();
+    tryConnectSocket();
     socket.emit("go-online");
   } catch (error) {
     console.error(error);

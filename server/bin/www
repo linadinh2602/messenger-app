@@ -39,7 +39,7 @@ io.use((socket, next) => {
   if (token) {
     jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
-        return next();
+        return next(new Error("Cannot verify provided token"));
       }
       User.findOne({
         where: { id: decoded.id },
@@ -54,8 +54,12 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  if (socket.user) {
+  if (socket.user && !socket.rooms.has(socket.user.id)) {
     socket.join(socket.user.id);
+  }
+  if (!socket.user) {
+    socket.disconnect();
+    return;
   }
 
   socket.on("go-online", () => {
@@ -69,9 +73,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new-message", ({ message, recipientId }) => {
+    console.log("Sending message", message, socket.user);
     if (socket.user) {
       socket.to(recipientId).emit("new-message", {
-        message: message,
+        message,
         sender: socket.user,
       });
     }
@@ -102,6 +107,7 @@ io.on("connection", (socket) => {
       onlineUsers.splice(userIndex, 1);
       socket.broadcast.emit("remove-offline-user", id);
     }
+    socket.disconnect();
   });
 });
 
