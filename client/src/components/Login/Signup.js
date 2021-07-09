@@ -10,13 +10,12 @@ import {
   TextField,
   FormHelperText,
 } from "@material-ui/core";
-import { register } from "./store/utils/thunkCreators";
+import { register } from "../../store/utils/thunkCreators";
+import { Theme, NavHeader } from "./index";
 import { useStyles } from "./Login";
-import bubble from "../src/components/SVG/bubble.svg";
 
 const Login = (props) => {
   const classes = useStyles();
-  const history = useHistory();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
 
@@ -41,37 +40,9 @@ const Login = (props) => {
 
   return (
     <Box className={classes.root}>
-      <Box className={classes.imageContainer}>
-        {" "}
-        <Grid className={classes.sloganContainer}>
-          <Grid className={classes.bubbleLogoContainer}>
-            <img className={classes.bubbleLogo} src={bubble} alt="Logo" />
-          </Grid>
-          <Typography className={classes.sloganText}>
-            Converse with anyone with any language
-          </Typography>
-        </Grid>
-      </Box>
+      <Theme />
       <Grid container item className={classes.mainContent}>
-        <Grid container item justify="flex-end" alignItems="center">
-          <Typography
-            variant="body1"
-            color="secondary"
-            className={classes.topBar}
-          >
-            Need to log in?
-          </Typography>
-          <Grid className={classes.whiteButtonGrid}>
-            <Button
-              size="large"
-              color="primary"
-              className={classes.whiteButton}
-              onClick={() => history.push("/login")}
-            >
-              Login
-            </Button>
-          </Grid>
-        </Grid>
+        <NavHeader title={"Need to log in?"} buttonText={"Login"} />
         <Grid
           direction="column"
           alignItems="center"
