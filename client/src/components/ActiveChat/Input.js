@@ -29,7 +29,7 @@ const Input = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (event.target.text.value !== "") {
+    if (event.target.text.value.trim() !== "") {
       const reqBody = {
         text: event.target.text.value,
         recipientId: otherUser.id,
