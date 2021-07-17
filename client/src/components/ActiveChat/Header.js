@@ -9,40 +9,40 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     height: 89,
-    marginBottom: 34,
-    boxShadow: "0 2px 20px 0 rgba(88,133,196,0.10)"
+    marginBottom: theme.spacing(6),
+    boxShadow: "0 2px 20px 0 rgba(88,133,196,0.10)",
   },
   content: {
     display: "flex",
     alignItems: "center",
-    marginLeft: 24
+    marginLeft: theme.spacing(5),
   },
   username: {
-    fontSize: 20,
+    fontSize: theme.typography.fontSize.heading,
     letterSpacing: -0.29,
     fontWeight: "bold",
-    marginRight: 14
+    marginRight: theme.spacing(3),
   },
   statusText: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize.small,
     color: "#BFC9DB",
-    letterSpacing: -0.17
+    letterSpacing: -0.17,
   },
   statusDot: {
     height: 8,
     width: 8,
     borderRadius: "50%",
-    marginRight: 5,
-    backgroundColor: "#D0DAE9"
+    marginRight: theme.spacing(1),
+    backgroundColor: "#D0DAE9",
   },
   online: {
-    background: "#1CED84"
+    background: "#1CED84",
   },
   ellipsis: {
     color: "#95A7C4",
-    marginRight: 24,
-    opacity: 0.5
-  }
+    marginRight: theme.spacing(5),
+    opacity: 0.5,
+  },
 }));
 
 const Header = (props) => {
@@ -53,8 +53,12 @@ const Header = (props) => {
     <Box className={classes.root}>
       <Box className={classes.content}>
         <Typography className={classes.username}>{username}</Typography>
-        <Box className={`${classes.statusDot} ${classes[online && "online"]}`}></Box>
-        <Typography className={classes.statusText}>{online ? "Online" : "Offline"}</Typography>
+        <Box
+          className={`${classes.statusDot} ${classes[online && "online"]}`}
+        ></Box>
+        <Typography className={classes.statusText}>
+          {online ? "Online" : "Offline"}
+        </Typography>
       </Box>
       <MoreHorizIcon classes={{ root: classes.ellipsis }} />
     </Box>

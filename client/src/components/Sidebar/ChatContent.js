@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "space-between",
-    marginLeft: 20,
+    marginLeft: theme.spacing(4),
     flexGrow: 1,
   },
   username: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: -0.2,
   },
   previewText: {
-    fontSize: 12,
+    fontSize: theme.typography.fontSize.small,
     color: (props) => !props.shouldEmphasize && "#9CADC8",
     letterSpacing: -0.17,
     fontWeight: (props) => (props.shouldEmphasize ? "bold" : "normal"),
@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
     height: 20,
     width: 20,
     backgroundColor: "#3F92FF",
-    marginRight: 10,
+    marginRight: theme.spacing(2),
     color: "white",
-    fontSize: 10,
+    fontSize: theme.typography.fontSize.xsmall,
     letterSpacing: -0.5,
     fontWeight: "bold",
     display: "flex",

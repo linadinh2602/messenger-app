@@ -2,20 +2,20 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Typography, Avatar } from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-end",
   },
   date: {
-    fontSize: 11,
+    fontSize: theme.typography.fontSize.xsmall,
     color: "#BECCE2",
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: theme.spacing(1),
   },
   text: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize.medium,
     color: "#91A3C0",
     letterSpacing: -0.2,
     padding: 8,
@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
   avatar: {
     height: 20,
     width: 19,
-    marginTop: 6,
+    marginTop: theme.spacing(1),
     borderRadius: 10,
     backgroundColor: "#84b8ff",
   },

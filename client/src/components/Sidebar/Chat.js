@@ -6,12 +6,12 @@ import Chip from "@material-ui/core/Chip";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { setConversationActive } from "../../store/utils/thunkCreators";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     borderRadius: 8,
     height: 80,
     boxShadow: "0 2px 10px 0 rgba(88,133,196,0.05)",
-    marginBottom: 10,
+    marginBottom: theme.spacing(2),
     display: "flex",
     alignItems: "center",
     "&:hover": {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
     },
   },
   unreadStatusChip: {
-    marginRight: 20,
+    marginRight: theme.spacing(4),
   },
 }));
 
